@@ -1,4 +1,4 @@
-require('./libs/upgrader-lib.js');
+var upgrader = require('./libs/upgrader.js');
 var ArgumentParser = require('argparse').ArgumentParser;
 var _ = require('underscore');
 
@@ -40,9 +40,10 @@ _.mapObject(args_dirty, function(item, key) {
 
 var options = {
     host: 'localhost',
-    db: 'app'
+    db: 'app',
+    path: 'alts'
 };
 
 options = _.extend(options, args);
 
-runMigrationFuture(options);
+upgrader.runUpgrader(options.host, options.db, options.path);
