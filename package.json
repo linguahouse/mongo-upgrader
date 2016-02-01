@@ -1,0 +1,13 @@
+{
+  "name": "lingua-site-model",
+  "version": "0.1.0",
+  "dependencies": {
+    "fibers": "^1.0.8",
+    "argparse": "1.0.4",
+    "underscore": "1.8.3",
+    "wildcard": "1.1.2"
+  },
+  "bin": {
+    "loader": "upgrader.js"
+  }
+}
