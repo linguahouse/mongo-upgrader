@@ -23,6 +23,18 @@ describe('Basic upgrader tests', function() {
             upgrader.runUpgrader.should.exist;
             return done();
         });
+        it("readOptions should exist", function(done) {
+            upgrader.readOptions.should.exist;
+            return done();
+        });
+        it("getDatabaseVersion should exist", function(done) {
+            upgrader.getDatabaseVersion.should.exist;
+            return done();
+        });
+        it("getLastError should exist", function(done) {
+            upgrader.getLastError.should.exist;
+            return done();
+        });
         it("should be able to run alt files in specified path and have database version updated", function(done) {
             var obj = {};
             obj['alts'] = {
