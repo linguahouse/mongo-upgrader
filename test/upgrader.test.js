@@ -41,7 +41,21 @@ describe('Basic upgrader tests', function() {
                 "alt1.js": "show databases"
             };
             mockfs(obj);
-            upgrader.runUpgrader('localhost', 'app', 'alts');
+
+            upgrader.__set__('getDatabaseVersion', function(mongohost, mongodatabase) {
+                return 1;
+            });
+            upgrader.__set__('runAltFile', function(mongohost, mongodatabase, filepath, version) {
+                should(version).equal(1);
+                should(filepath).equal('alts/alt1.js');
+            });
+            upgrader.__set__('readDirContents', function() {
+                return ['alts/alt1.js'];
+            });
+
+            var result = upgrader.runUpgraderRaw('localhost', 'app', 'alts');
+            should(result).equal(true);
+
             should(upgrader.getLastError()).equal(null);
 
             return done();

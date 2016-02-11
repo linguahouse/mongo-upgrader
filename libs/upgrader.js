@@ -105,7 +105,7 @@ var readOptions = function() {
     return options;
 };
 
-var runUpgrader = function(host, db, folder, quiet) {
+var runUpgraderRaw = function(host, db, folder, quiet) {
     quiet = quiet || false;
     if (!quiet) {
         console.log('=============');
@@ -115,11 +115,13 @@ var runUpgrader = function(host, db, folder, quiet) {
     // read the database version
     var version = getDatabaseVersion(host, db);
     if (version === false) {
-        return false;
+        return [false, 'Couldn\'t detect database version'];
     }
 
-    console.log('Mongo database version:', version);
-    console.log('====');
+    if (!quiet) {
+        console.log('Mongo database version:', version);
+        console.log('====');
+    }
 
     try {
         var files = readDirContents(folder);
@@ -127,7 +129,7 @@ var runUpgrader = function(host, db, folder, quiet) {
         console.log('ERROR: Stopping upgrader because of filesystem error');
         console.log(e.message);
         error = e.message;
-        return false;
+        return [false, 'Couldn\'t read alt file contents'];
     }
 
     files.filter(function(a) {
@@ -140,9 +142,14 @@ var runUpgrader = function(host, db, folder, quiet) {
         runAltFile(host, db, fullpath, parseInt(file.substring(3), 10));
     });
 
-    console.log('Upgrader finished');
-    console.log('=============');
-}.future();
+    if (!quiet) {
+        console.log('Upgrader finished');
+        console.log('=============');
+    }
+    return true;
+};
+
+var runUpgrader = runUpgraderRaw.future();
 
 getLastError = function() {
     return error;
@@ -150,5 +157,6 @@ getLastError = function() {
 
 exports.readOptions = readOptions;
 exports.runUpgrader = runUpgrader;
+exports.runUpgraderRaw = runUpgraderRaw; // for tests
 exports.getLastError = getLastError;
 exports.getDatabaseVersion = getDatabaseVersion;
