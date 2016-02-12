@@ -11,5 +11,5 @@ Available options:
 Each alt script is ran in context of Mongo shell, and includes the underscore library.
 
 ```
-mongo-upgrader [-h] [-v] -u HOST -d DATABASE -f FOLDER
+mongo-upgrader -u HOST -d DATABASE -f FOLDER
 ```
