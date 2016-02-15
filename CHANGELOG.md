@@ -4,6 +4,11 @@
 CHANGELOG
 ---------
 
+### 1.1.1
+
+* Script for publishing npm
+
+
 ### 1.1.0
 
 * Package description changes
