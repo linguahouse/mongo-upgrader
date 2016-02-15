@@ -1,5 +1,5 @@
 {
-  "name": "lingua-site-model",
+  "name": "mongo-upgrader",
   "version": "0.1.0",
   "dependencies": {
     "fibers": "^1.0.8",
