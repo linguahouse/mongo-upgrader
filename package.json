@@ -1,6 +1,9 @@
 {
   "name": "mongo-upgrader",
   "version": "1.0.0",
+  "license": "MIT",
+  "description": "This is a simple tool to manage MongoDB database upgrades.",
+  "repository": "https://github.com/linguahouse/mongo-upgrader.git",
   "dependencies": {
     "fibers": "^1.0.8",
     "argparse": "1.0.4",
