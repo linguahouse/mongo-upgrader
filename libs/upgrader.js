@@ -1,7 +1,5 @@
-var Fiber = require('fibers');
 var Future = require('fibers/future');
 var path = require('path');
-var process = require('process');
 var fs = Future.wrap(require('fs'));
 var exec = require('child_process').exec;
 var ArgumentParser = require('argparse').ArgumentParser;
@@ -25,6 +23,12 @@ var getCommandResult = function(command) {
     return results;
 };
 
+var updateDatabaseVersion = function(mongohost, mongodatabase, version) {
+    var update = 'db.migration.update({ key: \'version\' }, { \\$set: { key: \'version\', value: ' + version + ' } }, { upsert: true });';
+    command = 'mongo ' + mongohost + '/' + mongodatabase + ' --quiet --eval "'+update+'"';
+    return getCommandResult(command);
+};
+
 // run one alt file
 var runAltFile = function(mongohost, mongodatabase, filepath, version) {
     var command = 'mongo ' + mongohost + '/' + mongodatabase +' libs/underscore.js '+filepath;
@@ -35,11 +39,7 @@ var runAltFile = function(mongohost, mongodatabase, filepath, version) {
     console.log(output);
     console.log('-- Finished alt file '+filepath);
     console.log('-------------');
-
-    var update = 'db.migration.update({ key: \'version\' }, { \\$set: { key: \'version\', value: ' + version + ' } }, { upsert: true });';
-    command = 'mongo ' + mongohost + '/' + mongodatabase + ' --quiet --eval "'+update+'"';
-    getCommandResult(command);
-
+    updateDatabaseVersion(mongohost, mongodatabase, version);
 };
 
 var getDatabaseVersion = function(mongohost, mongodatabase) {
@@ -98,7 +98,7 @@ var readOptions = function() {
     var options = {
         host: 'localhost',
         db: 'app',
-        path: 'alts'
+        folder: 'alts'
     };
 
     options = _.extend(options, args);
@@ -111,6 +111,7 @@ var runUpgraderRaw = function(host, db, folder, quiet) {
         console.log('=============');
         console.log('Upgrader started');
     }
+    error = null;
 
     // read the database version
     var version = getDatabaseVersion(host, db);
