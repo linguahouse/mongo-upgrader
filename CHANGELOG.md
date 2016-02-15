@@ -4,6 +4,11 @@
 CHANGELOG
 ---------
 
+### 1.1.0
+
+* Package description changes
+
+
 ### 1.0.0
 
 * LIN-364 updated tests
